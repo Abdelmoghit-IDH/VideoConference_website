@@ -44,6 +44,8 @@ class DemoNavbar extends React.Component {
   };
 
   render() {
+
+    const showGetStarted = ["login","register","forgetPassword"];
     return (
       <>
         <header className="header-global">
@@ -144,11 +146,16 @@ class DemoNavbar extends React.Component {
                   </NavItem>
                   <NavItem className="d-none d-lg-block ml-lg-4">
                     <Link className="text-light" to="/login-page">
-                      <Button className="btn-neutral btn-icon" color="default">
-                        <span className="nav-link-inner--text ml-1">
-                          Get Started
-                        </span>
-                      </Button>
+                      {!showGetStarted.includes(this.props.currentPage) && (
+                        <Button
+                          className="btn-neutral btn-icon"
+                          color="default"
+                        >
+                          <span className="nav-link-inner--text ml-1">
+                            Get Started
+                          </span>
+                        </Button>
+                      )}
                     </Link>
                   </NavItem>
                 </Nav>

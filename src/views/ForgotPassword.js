@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "react-router-dom/Link";
 
 // reactstrap components
 import {
@@ -30,7 +31,7 @@ class ForgotPassword extends React.Component {
   render() {
     return (
       <>
-        <DemoNavbar />
+        <DemoNavbar currentPage="forgetPassword" />
         <main ref="main">
           <section className="section section-shaped section-lg">
             <div className="shape shape-style-1 bg-gradient-default">
@@ -49,7 +50,9 @@ class ForgotPassword extends React.Component {
                   <Card className="bg-secondary shadow border-0">
                     <CardHeader className="bg-white pb-3">
                       <div className="text-muted text-center mb-3">
-                        <h5>Forgot password ?</h5>
+                        <h4 style={{ fontWeight: "bold" }}>
+                          Forgot password ?
+                        </h4>
                       </div>
                     </CardHeader>
                     <CardBody className="px-lg-5 py-lg-5">
@@ -82,14 +85,14 @@ class ForgotPassword extends React.Component {
                       </Form>
                       <div className="text-center text-muted mb-4">
                         <h6>Just remembered ?</h6>
-                        <Button
-                          className="text-primary ml-1"
-                          color="link"
-                          href="#pablo"
-                          onClick={(e) => e.preventDefault()}
-                        >
-                          Sign In
-                        </Button>
+                        <Link to="/login-page">
+                          <Button
+                            className="text-primary ml-1"
+                            color="link"
+                          >
+                            Sign In
+                          </Button>
+                        </Link>
                       </div>
                     </CardBody>
                   </Card>
