@@ -136,7 +136,7 @@ class Login extends React.Component {
                   </Card>
                   <Row className="mt-3">
                     <Col className="text-light" xs="6">
-                      <Link className="text-light" to="register-page">
+                      <Link className="text-light" to="/forgot-password">
                         <small>Forgot password?</small>
                       </Link>
                     </Col>
