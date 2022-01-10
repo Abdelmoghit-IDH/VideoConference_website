@@ -14,6 +14,11 @@ import {
   Container,
   Row,
   Col,
+  FormGroup,
+  Input,
+  InputGroupAddon,
+  InputGroupText,
+  InputGroup,
 } from "reactstrap";
 
 // core components
@@ -59,20 +64,43 @@ class Landing extends React.Component {
                         professionnel sécurisé, afin de le rendre disponible
                         pour tous.
                       </p>
-                      <div className="btn-wrapper">
-                        <Button
-                          className="btn-icon mb-3 mb-sm-0"
-                          color="info"
-                          href=""
-                        >
-                          <span className="btn-inner--icon mr-1">
-                            <i className="fa fa-video-camera" />
-                          </span>
-                          <span className="btn-inner--text">
-                            Nouvelle réunion
-                          </span>
-                        </Button>
-                      </div>
+                      <Col lg="10" sm="2">
+                        <Row>
+                          <div className="btn-wrapper mb-4">
+                            <Button
+                              className="btn-icon mb-3 mb-sm-0"
+                              color="info"
+                              href=""
+                            >
+                              <span className="btn-inner--icon mr-1">
+                                <i className="fa fa-video-camera" />
+                              </span>
+                              <span className="btn-inner--text">
+                                Nouvelle réunion
+                              </span>
+                            </Button>
+                          </div>
+                          <FormGroup>
+                            <InputGroup className="btn-icon mb-3 mb-sm-0 ml-2">
+                              <InputGroupAddon addonType="prepend">
+                                <InputGroupText>
+                                  <i className="fa fa-keyboard-o" />
+                                </InputGroupText>
+                              </InputGroupAddon>
+                              <Input
+                                placeholder="Saisir un code ou un lien"
+                                type="text"
+                                onFocus={() =>
+                                  this.setState({ searchFocused: true })
+                                }
+                                onBlur={() =>
+                                  this.setState({ searchFocused: false })
+                                }
+                              />
+                            </InputGroup>
+                          </FormGroup>
+                        </Row>
+                      </Col>
                     </Col>
                   </Row>
                 </div>

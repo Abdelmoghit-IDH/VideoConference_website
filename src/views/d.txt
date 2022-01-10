@@ -1,7 +1,6 @@
 import Link from "react-router-dom/Link";
-import React from "react";
-
-import AuthService from "../services/auth.service";
+import { useRef, useState, useEffect } from "react";
+import axios from './api/axios';
 
 // reactstrap components
 import {
@@ -24,91 +23,68 @@ import {
 import Navbar from "../components/Navbars/Navbar.js";
 import SimpleFooter from "../components/Footers/SimpleFooter";
 
-const required = (value) => {
-  if (!value) {
-    return (
-      <div className="alert alert-danger" role="alert">
-        This field is required!
-      </div>
-    );
-  }
-};
-
 class Login extends React.Component {
   componentDidMount() {
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
     this.refs.main.scrollTop = 0;
   }
-
-  constructor(props) {
-    super(props);
-    this.handleLogin = this.handleLogin.bind(this);
-    this.onChangeUsername = this.onChangeUsername.bind(this);
-    this.onChangePassword = this.onChangePassword.bind(this);
-
-    this.state = {
-      username: "",
-      password: "",
-      loading: false,
-      message: "",
-    };
-  }
-
-  onChangeUsername(e) {
-    this.setState({
-      username: e.target.value,
-    });
-  }
-
-  onChangePassword(e) {
-    this.setState({
-      password: e.target.value,
-    });
-  }
-
-  handleLogin(e) {
-    e.preventDefault();
-
-    this.setState({
-      message: "",
-      loading: true,
-    });
-
-    //this.form.validateAll();
-
-    AuthService.login(this.state.username, this.state.password).then(
-      () => {
-        this.props.history.push("/");
-        window.location.reload();
-        this.setState({
-          message: "Login successfully",
-          successful: true,
-        });
-      },
-      (error) => {
-        const resMessage =
-          (error.response &&
-            error.response.data &&
-            error.response.data.message) ||
-          error.message ||
-          error.toString();
-
-        this.setState({
-          loading: false,
-          successful: false,
-          message: resMessage,
-        });
-      }
-    );
-    /* else {
-      this.setState({
-        loading: false,
-      });
-    } */
-  }
-
   render() {
+    const userRef = useRef();
+    const errRef = useRef();
+
+    const [user, setUser] = useState("");
+    const [pwd, setPwd] = useState("");
+    const [errMsg, setErrMsg] = useState("");
+    const [success, setSuccess] = useState(false);
+
+    useEffect(() => {
+      userRef.current.focus();
+    }, []);
+
+    useEffect(() => {
+      setErrMsg("");
+    }, [user, pwd]);
+
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+
+      console.log(user,pwd);
+      setPwd("");
+      setUser("");
+      setSuccess(true);
+
+      /* try {
+        const response = await axios.post(
+          LOGIN_URL,
+          JSON.stringify({ user, pwd }),
+          {
+            headers: { "Content-Type": "application/json" },
+            withCredentials: true,
+          }
+        );
+        console.log(JSON.stringify(response?.data));
+        console.log(JSON.stringify(response));
+        const accessToken = response?.data?.accessToken;
+        const roles = response?.data?.roles;
+        setAuth({ user, pwd, roles, accessToken });
+        setUser("");
+        setPwd("");
+        setSuccess(true);
+      } catch (err) {
+        if (!err?.response) {
+          setErrMsg("No Server Response");
+        } else if (err.response?.status === 400) {
+          setErrMsg("Missing Username or Password");
+        } else if (err.response?.status === 401) {
+          setErrMsg("Unauthorized");
+        } else {
+          setErrMsg("Login Failed");
+        }
+        errRef.current.focus();
+      } */
+    };
+
     return (
       <>
         <Navbar currentPage="login" />
@@ -125,6 +101,9 @@ class Login extends React.Component {
               <span />
             </div>
             <Container className="pt-lg-7">
+              <p ref={errRef} aria-live="assertive">
+                {errMsg}
+              </p>
               <Row className="justify-content-center">
                 <Col lg="5">
                   <Card className="bg-secondary shadow border-0">
@@ -134,28 +113,23 @@ class Login extends React.Component {
                       </div>
                     </CardHeader>
                     <CardBody className="px-lg-5 py-lg-5">
-                      <Form
-                        role="form"
-                        type="submit"
-                        ref={(c) => {
-                          this.form = c;
-                        }}
-                      >
+                      <Form role="form" onSubmit={handleSubmit}>
                         <FormGroup className="mb-3">
                           <InputGroup className="input-group-alternative">
                             <InputGroupAddon addonType="prepend">
                               <InputGroupText>
-                                <i className="fa fa-user" />
+                                <i className="ni ni-email-83" />
                               </InputGroupText>
                             </InputGroupAddon>
                             <Input
                               placeholder="Email"
+                              id="email"
                               type="email"
-                              name="email"
                               autoComplete="off"
-                              value={this.state.username}
-                              onChange={this.onChangeUsername}
-                              validations={[required]}
+                              ref={userRef}
+                              onChange={(e) => setUser(e.target.value)}
+                              value={user}
+                              required
                             />
                           </InputGroup>
                         </FormGroup>
@@ -169,46 +143,32 @@ class Login extends React.Component {
                             <Input
                               placeholder="Password"
                               type="password"
-                              name="password"
-                              value={this.state.password}
-                              onChange={this.onChangePassword}
-                              validations={[required]}
+                              id="password"
+                              ref={userRef}
+                              onChange={(e) => setUser(e.target.value)}
+                              value={pwd}
+                              required
                             />
                           </InputGroup>
                         </FormGroup>
-                        <Row className="my-4">
-                          <div className="custom-control custom-control-alternative custom-checkbox">
-                            <input
-                              className="custom-control-input"
-                              id=" customCheckLogin"
-                              type="checkbox"
-                            />
-                            <label
-                              className="custom-control-label"
-                              htmlFor=" customCheckLogin"
-                            >
-                              <span>Remember me</span>
-                            </label>
-                          </div>
-                        </Row>
-
-                        {this.state.successful===false && (
-                          <div className="form-group">
-                            <div className="alert alert-danger" role="alert">
-                              {this.state.message}
-                            </div>
-                          </div>
-                        )}
-
+                        <div className="custom-control custom-control-alternative custom-checkbox">
+                          <input
+                            className="custom-control-input"
+                            id=" customCheckLogin"
+                            type="checkbox"
+                          />
+                          <label
+                            className="custom-control-label"
+                            htmlFor=" customCheckLogin"
+                          >
+                            <span>Remember me</span>
+                          </label>
+                        </div>
                         <div className="text-center">
                           <Button
                             className="my-4"
                             color="primary"
                             type="button"
-                            onClick={this.handleLogin}
-                            ref={(c) => {
-                              this.checkBtn = c;
-                            }}
                           >
                             Sign in
                           </Button>
