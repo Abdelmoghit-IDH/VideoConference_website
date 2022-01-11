@@ -1,7 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
+
 // JavaScript plugin that hides or shows a component based on your scroll
 import Headroom from "headroom.js";
+
 // reactstrap components
 import {
   Button,
@@ -21,6 +23,17 @@ import reactWhite from "../../assets/img/brand/logo-app.png";
 import argonReact from "../../assets/img/brand/argon-react.png";
 
 class DemoNavbar extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      redirect: null,
+      userReady: false,
+      currentUser: { username: "" }
+    };
+  }
+
+
   componentDidMount() {
     let headroom = new Headroom(document.getElementById("navbar-main"));
     // initialise
@@ -44,8 +57,8 @@ class DemoNavbar extends React.Component {
   };
 
   render() {
-
-    const showGetStarted = ["login","register","forgetPassword"];
+    const showGetStarted = ["login", "register", "forgetPassword"];
+    console.log("current user",this.props.currentPage)
     return (
       <>
         <header className="header-global">
@@ -144,9 +157,10 @@ class DemoNavbar extends React.Component {
                       Star us on Github
                     </UncontrolledTooltip>
                   </NavItem>
+
                   <NavItem className="d-none d-lg-block ml-lg-4">
                     <Link className="text-light" to="/login-page">
-                      {!showGetStarted.includes(this.props.currentPage) && (
+                      {(!showGetStarted.includes(this.props.currentPage) || this.props.currentUser!=="") && (
                         <Button
                           className="btn-neutral btn-icon"
                           color="default"

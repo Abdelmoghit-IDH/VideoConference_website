@@ -4,6 +4,8 @@ import promo1 from "../assets/img/theme/promo-1.png";
 import cardImg from "../assets/img/theme/img-1-1200x1000.jpg";
 import team1 from "../assets/img/theme/team-1-800x800.jpg";
 
+import AuthService from "../services/auth.service";
+
 // reactstrap components
 import {
   Badge,
@@ -26,16 +28,33 @@ import Navbar from "../components/Navbars/Navbar.js";
 import CardsFooter from "../components/Footers/CardsFooter.js";
 
 class Landing extends React.Component {
-  state = {};
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      redirect: null,
+      userReady: false,
+      currentUser: { username: "" }
+    };
+  }
+
   componentDidMount() {
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
     this.refs.main.scrollTop = 0;
+
+
+    const currentUser = AuthService.getCurrentUser();
+
+    if (!currentUser) this.setState({ redirect: "/" });
+    this.setState({ currentUser: currentUser, userReady: true })
   }
   render() {
+    console.log(this.state.currentUser)
     return (
       <>
-        <Navbar />
+        <Navbar currentUser={this.state.currentUser}/>
         <main ref="main">
           <div className="position-relative">
             {/* shape Hero */}

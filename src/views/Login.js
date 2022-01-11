@@ -111,7 +111,7 @@ class Login extends React.Component {
   render() {
     return (
       <>
-        <Navbar currentPage="login" />
+        <Navbar currentPage="login" currentUser="" />
         <main ref="main">
           <section className="section section-shaped section-lg">
             <div className="shape shape-style-1 bg-gradient-default">
@@ -149,7 +149,7 @@ class Login extends React.Component {
                               </InputGroupText>
                             </InputGroupAddon>
                             <Input
-                              placeholder="Email"
+                              placeholder="Username"
                               type="email"
                               name="email"
                               autoComplete="off"
@@ -192,7 +192,7 @@ class Login extends React.Component {
                           </div>
                         </Row>
 
-                        {this.state.successful===false && (
+                        {this.state.successful === false && (
                           <div className="form-group">
                             <div className="alert alert-danger" role="alert">
                               {this.state.message}
@@ -205,16 +205,20 @@ class Login extends React.Component {
                             className="my-4"
                             color="primary"
                             type="button"
+                            disabled={this.state.loading}
                             onClick={this.handleLogin}
                             ref={(c) => {
                               this.checkBtn = c;
                             }}
                           >
+                            {this.state.loading && (
+                              <span className="spinner-border spinner-border-sm"></span>
+                            )}
                             Sign in
                           </Button>
                         </div>
                       </Form>
-                    </CardBody>
+                    </CardBody> 
                   </Card>
                   <Row className="mt-3">
                     <Col className="text-light" xs="6">

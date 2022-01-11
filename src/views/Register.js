@@ -131,6 +131,7 @@ class Register extends React.Component {
         this.setState({
           message: response.data.message,
           successful: true,
+          password: "",
         });
       },
       (error) => {
@@ -153,7 +154,7 @@ class Register extends React.Component {
   render() {
     return (
       <>
-        <DemoNavbar currentPage="register" />
+        <DemoNavbar currentPage="register" currentUser="" />
         <main ref="main">
           <section className="section section-shaped section-lg">
             <div className="shape shape-style-1 bg-gradient-default">
@@ -280,8 +281,12 @@ class Register extends React.Component {
                             className="mt-4"
                             color="primary"
                             type="button"
+                            disabled={this.state.loading}
                             onClick={this.handleRegister}
                           >
+                            {this.state.loading && (
+                              <span className="spinner-border spinner-border-sm"></span>
+                            )}
                             Create account
                           </Button>
                         </div>
