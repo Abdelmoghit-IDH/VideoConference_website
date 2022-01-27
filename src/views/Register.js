@@ -132,6 +132,8 @@ class Register extends React.Component {
           message: response.data.message,
           successful: true,
           password: "",
+          username: "",
+          email: "",
         });
       },
       (error) => {
